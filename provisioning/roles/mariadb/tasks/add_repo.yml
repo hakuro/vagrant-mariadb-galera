@@ -1,0 +1,3 @@
+---
+- name: copy repository file
+  copy: src=MariaDB.repo dest=/etc/yum.repos.d/MariaDB.repo owner=root group=root mode="u=rw,g=r,o=r"

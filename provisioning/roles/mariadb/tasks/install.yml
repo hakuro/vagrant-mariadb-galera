@@ -1,0 +1,39 @@
+---
+- name: install mariadb
+  yum: name={{ item }} state=installed
+  with_items:
+    - MariaDB-Galera-server
+    - MariaDB-client
+    - galera
+
+- name: add innodb config
+  lineinfile: dest=/etc/my.cnf.d/server.cnf state=present insertafter="^\[mysqld\]$" line={{ item }}
+  with_items:
+    - "query_cache_size=0"
+    - "binlog_format=ROW"
+    - "default_storage_engine=InnoDB"
+    - "innodb_autoinc_lock_mode=2"
+    - "innodb_locks_unsafe_for_binlog=1"
+    - "innodb_buffer_pool_size=128M"
+    - "innodb_log_file_size=8M"
+    - "innodb_file_per_table"
+    - "innodb_flush_log_at_trx_commit=2"
+
+- name: add wsrep config
+  lineinfile: dest=/etc/my.cnf.d/server.cnf state=present insertafter="^\[galera\]$" line={{ item }}
+  with_items:
+    - "wsrep_provider=/usr/lib64/galera/libgalera_smm.so"
+    - "wsrep_cluster_address=gcomm://192.168.50.11,192.168.50.12,192.168.50.13"
+    - "wsrep_cluster_name=\"CLUSTER1\""
+    - "wsrep_node_name=\"{{ inventory_hostname }}\""
+    - "wsrep_node_address=\"{{ ansible_eth1.ipv4.address }}\""
+    - "wsrep_sst_method=rsync"
+
+- name: start mysql first server
+  service: name=mysql state=started enabled=true args="--wsrep-new-cluster"
+  when: inventory_hostname == 'mariadb1'
+
+- name: start mysql other server
+  service: name=mysql state=started enabled=true
+  when: inventory_hostname != 'mariadb1'
+
