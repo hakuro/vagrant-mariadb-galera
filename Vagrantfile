@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define :mariadb1 do |server|
-      server.vm.box = "centos65"
+      server.vm.box = "lyrical-centos65-64"
       server.vm.hostname = "mariadb1"
       server.vm.network :private_network, ip:"192.168.50.11"
 
@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define :mariadb2 do |server|
-      server.vm.box = "centos65"
+      server.vm.box = "lyrical-centos65-64"
       server.vm.hostname = "mariadb2"
       server.vm.network :private_network, ip:"192.168.50.12"
 
@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define :mariadb3 do |server|
-      server.vm.box = "centos65"
+      server.vm.box = "lyrical-centos65-64"
       server.vm.hostname = "mariadb3"
       server.vm.network :private_network, ip:"192.168.50.13"
 
