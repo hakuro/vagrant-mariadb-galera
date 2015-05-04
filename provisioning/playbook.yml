@@ -1,6 +1,7 @@
 ---
 - hosts: db
   sudo: yes
+  gather_facts: no
   user: vagrant
   roles:
     - { role: mariadb }
